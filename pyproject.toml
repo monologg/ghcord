@@ -1,6 +1,6 @@
 [project]
 name = "ghcord"
-version = "0.1.0"
+version = "0.1.1"
 description = "Self-hosted GitHub <-> Discord integration server (GitHub App based)"
 license = "MIT"
 license-files = ["LICENSE"]
