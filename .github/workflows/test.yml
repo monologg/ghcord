@@ -1,0 +1,55 @@
+name: Test
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.11.26"
+
+      - name: Set up Python from pyproject.toml
+        uses: actions/setup-python@v6
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Run tests
+        run: make test
+
+  smoke-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Build production image
+        run: docker build -t ghcord:ci .
+
+      # The server boots fail-closed even without config — health check endpoint is "/"
+      - name: Smoke test production image
+        run: |
+          docker run -d --rm --name smoke -p 8788:8788 ghcord:ci
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8788/ > /dev/null; then
+              echo "Health check passed"
+              docker stop smoke
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Health check failed"
+          docker logs smoke
+          docker stop smoke
+          exit 1

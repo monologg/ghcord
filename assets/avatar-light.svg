@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- ghcord avatar, light ground — GitHub App logo -->
+  <rect width="1024" height="1024" fill="#F6F7FB"/>
+  <g transform="translate(139.6 178.8) scale(5.6)">
+    <path d="M28 18 H100 C108.8 18 116 25.2 116 34 V78 C116 86.8 108.8 94 100 94 H60 L41 110.5 C38 113 33.5 111.2 33.5 107.5 V94 H28 C19.2 94 12 86.8 12 78 V34 C12 25.2 19.2 18 28 18 Z" fill="#3A40C9"/>
+    <path d="M40 58 H88" stroke="#FFFFFF" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+    <circle cx="40" cy="58" r="8" fill="#FFFFFF"/>
+    <circle cx="64" cy="58" r="8" fill="#FFFFFF"/>
+    <circle cx="88" cy="58" r="8" fill="#FFFFFF"/>
+    <circle cx="108" cy="20" r="13" fill="#FF5A45" stroke="#F6F7FB" stroke-width="6"/>
+  </g>
+</svg>

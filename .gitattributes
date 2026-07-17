@@ -1,0 +1,4 @@
+*.py	eol=lf
+*.md	eol=lf
+*.toml	eol=lf
+*.yml	eol=lf

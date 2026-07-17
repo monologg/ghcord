@@ -1,0 +1,38 @@
+# ghcord routing config — copy to config.toml and edit.
+# config.toml holds Discord webhook URLs (secrets), so it is gitignored.
+# Path can be overridden with the GHCORD_CONFIG env (default: ./config.toml).
+
+# Ops alert channel — notified when a Discord delivery fails.
+# Use a channel separate from routing targets. If omitted, failures only go to logs.
+# [ops]
+# webhook_url = "https://discord.com/api/webhooks/…"
+
+# Personal DM alerts — GitHub login = Discord user ID.
+# Users listed here get a bot DM when they are a review requestee, review outcome
+# recipient, or @mention target (events they triggered themselves are excluded).
+# Discord ID: developer mode → right-click profile → Copy User ID.
+# [users]
+# monologg = "123456789012345678"
+
+[default]
+# Default channel for repos not listed under [repos] below.
+# The GitHub App covers every repo, so this one line equals Slack's "subscribe whole org".
+webhook_url = "https://discord.com/api/webhooks/…"
+# If omitted, the Slack official app's default 5: issues, pulls, commits, releases, deployments
+# Opt-in: reviews, comments, branches
+# events = ["issues", "pulls", "commits", "releases", "deployments"]
+
+# Per-repo overrides — omitted keys fall back to default
+[repos."monologg/ghcord"]
+webhook_url = "https://discord.com/api/webhooks/…"
+events = ["issues", "pulls", "commits", "reviews", "comments"]
+# Branch filter for commits (glob). If omitted, default branch only — same as Slack.
+# branches = ["master", "release/*"]  # all branches: ["*"]
+# Label filter for issues/PRs/comments/reviews. Passes if any listed label is present. Omit for all.
+# labels = ["bug", "urgent"]
+
+# A quieter second example: a docs-heavy repo where only triaged issues matter.
+# [repos."monologg/handbook"]
+# webhook_url = "https://discord.com/api/webhooks/…"
+# events = ["issues", "pulls"]
+# labels = ["triaged"]

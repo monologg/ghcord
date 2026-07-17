@@ -1,0 +1,21 @@
+services:
+  ghcord:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8788:8788"  # cloudflared reaches us via LAN IP, so host binding is required
+    env_file: .env
+    environment:
+      GHCORD_CONFIG: /srv/config.toml
+      GHCORD_DB: /srv/data/ghcord.db
+      GITHUB_APP_PRIVATE_KEY_PATH: /srv/ghcord.pem
+    volumes:
+      - ./config.toml:/srv/config.toml:ro
+      - ./ghcord.pem:/srv/ghcord.pem:ro
+      - ghcord-data:/srv/data  # delivery ledger — dedupe/ledger survives container recreation
+    # Protect other services on the same host — caps resource usage even under a traffic surge
+    cpus: 0.5
+    mem_limit: 256m
+
+volumes:
+  ghcord-data:

@@ -1,0 +1,51 @@
+[project]
+name = "ghcord"
+version = "0.1.0"
+description = "Self-hosted GitHub <-> Discord integration server (GitHub App based)"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "fastapi==0.139.0",
+    "githubkit[auth-app]==0.16.0",
+    "httpx==0.28.1",
+    "loguru==0.7.3",
+    "orjson==3.11.9",
+    "pynacl==1.6.2",
+    "tzdata==2026.3",
+    "uvicorn==0.51.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "respx==0.23.1",
+]
+quality = [
+    "pre-commit==4.6.0",
+    "ruff==0.15.21",
+]
+
+[tool.ruff]
+line-length = 119
+
+[tool.ruff.lint]
+select = ["C", "E", "F", "I", "W"]
+ignore = ["C901", "E501", "E402"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E402", "F401", "F403", "F811"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
