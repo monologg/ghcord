@@ -33,7 +33,7 @@ App 설정의 웹훅 시크릿과 `.env`의 `GITHUB_WEBHOOK_SECRET`이 일치하
 HTTPS 노출이 컨테이너까지 닿지 않고 있습니다. 바깥에서 안쪽으로 체인을 테스트하세요: `curl https://host/` → 프록시/터널 타깃 → 호스트에서 `curl http://127.0.0.1:8788/`.
 
 **전달은 202인데 Discord에 아무것도 나타나지 않는다.**
-202는 "수신하고 검증했다"이지 "라우팅했다"가 아닙니다. `docker compose logs`에서 해당 전달의 줄을 확인하세요: `outcome=skipped`는 매칭된 라우트가 없다는 뜻입니다 (구독도 없고 매칭되는 `config.toml` 항목도 없거나, 이벤트 타입이 채널의 피처 목록에 없음 — `reviews`/`comments`/`branches`는 옵트인임을 기억하세요). `outcome=failed`는 Discord 웹훅이 거부했다는 뜻입니다 — 상세 내용을 보고 `[ops]` 채널을 확인하세요.
+202는 "수신하고 검증했다"이지 "라우팅했다"가 아닙니다. `docker compose logs`에서 해당 전달의 줄을 확인하세요: `outcome=skipped`는 매칭된 라우트가 없다는 뜻입니다 (구독도 없고 매칭되는 `config.toml` 항목도 없거나, 이벤트 타입이 채널이 구독한 `features` 목록에 없음 — `reviews`/`comments`/`branches`는 옵트인임을 기억하세요). `outcome=failed`는 Discord 웹훅이 거부했다는 뜻입니다 — 상세 내용을 보고 `[ops]` 채널을 확인하세요.
 
 **피처 브랜치의 푸시 이벤트가 도착하지 않는다.**
 의도된 동작입니다: `commits`는 Slack 앱과 동일하게 기본 브랜치만 대상으로 합니다. `commits:*`(모든 브랜치) 또는 `commits:release/*` 같은 glob으로 구독하세요.
