@@ -15,7 +15,9 @@ assets
 config*.toml
 *.pem
 *.db*
-README.md
+README*.md
+AGENTS.md
+CLAUDE.md
 Dockerfile
 docker-compose.yml
 .dockerignore
