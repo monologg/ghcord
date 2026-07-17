@@ -23,7 +23,7 @@ First test, in any channel:
 /github subscribe repo:owner/repo
 ```
 
-<!-- SCREENSHOT: the ephemeral confirmation after a successful subscribe -->
+<img src="../assets/screenshots/subscribe-command.png" width="720" alt="/github subscribe and its ephemeral confirmation response">
 
 Then trigger an event on that repo (open a test issue) and watch the embed arrive.
 
