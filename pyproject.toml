@@ -49,3 +49,7 @@ line-ending = "auto"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.coverage.run]
+# Manual pre-deploy diagnostic (docs/06) — run by hand, not under test
+omit = ["app/identity/verify_install.py"]
