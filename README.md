@@ -26,6 +26,10 @@
 </p>
 
 <p align="center">
+  English | <a href="README.ko.md">한국어</a>
+</p>
+
+<p align="center">
   <img src="assets/screenshots/hero-channel.png" width="640" alt="ghcord notifications in a Discord channel — a PR opened, merged, and pushed">
 </p>
 

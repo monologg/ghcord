@@ -1,5 +1,7 @@
 # Setup guide
 
+English | [한국어](ko/README.md)
+
 This guide takes you from nothing to a working ghcord instance: GitHub events landing in your Discord channels, slash commands working, and personal DM alerts wired up. Budget **about 30 minutes**. Every credential involved is one you create yourself, and none of them leave your server.
 
 ## Before you start
