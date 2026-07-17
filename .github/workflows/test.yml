@@ -10,6 +10,11 @@ jobs:
   run-test:
     runs-on: ubuntu-latest
 
+    # id-token is needed for Codecov's OIDC (tokenless) upload
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -26,6 +31,16 @@ jobs:
 
       - name: Run tests
         run: make test
+
+      - name: Generate coverage XML
+        run: uv run --frozen coverage xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          use_oidc: true
+          files: coverage.xml
+          fail_ci_if_error: false
 
   smoke-test:
     runs-on: ubuntu-latest

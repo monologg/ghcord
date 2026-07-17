@@ -22,6 +22,7 @@
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
   <a href="https://github.com/monologg/ghcord/actions/workflows/test.yml"><img src="https://github.com/monologg/ghcord/actions/workflows/test.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="https://codecov.io/gh/monologg/ghcord"><img src="https://codecov.io/gh/monologg/ghcord/graph/badge.svg" alt="Coverage"></a>
 </p>
 
 <p align="center">

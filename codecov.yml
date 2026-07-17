@@ -1,0 +1,9 @@
+coverage:
+  status:
+    # Report coverage on PRs without ever failing the check
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
