@@ -45,6 +45,9 @@ Global commands take up to an hour to propagate — set `DISCORD_GUILD_ID` and r
 **`/github subscribe` responds with an error.**
 Two usual causes: `DISCORD_BOT_TOKEN` missing/stale in `.env`, or the bot lacks **Manage Webhooks** in that channel (channel-level permission overrides can deny what the server-level role grants).
 
+**`/github subscribe` says the App isn't installed on that repo.**
+One GitHub App installation covers one account. A repo owned by a *different* account — typically an organization you also belong to — needs its own installation, and until then GitHub sends no webhooks for it at all. Open the link in the error (`https://github.com/apps/<your-app>/installations/select_target`) and install the App on that account, then subscribe again. Note the account picker is at `/installations/select_target`; the plain `/installations/new` URL just redirects to your existing installation. Installing on an organization requires being an organization owner.
+
 **`/github open` / `close` / `reopen` responds 403.**
 The App has `Issues: Read` but not `Read and write` — or you upgraded the permission but never approved it. Permission changes require re-approval: GitHub → Settings → Applications → Installed GitHub Apps → your app → approve the pending banner.
 

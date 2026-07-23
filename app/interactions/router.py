@@ -19,12 +19,13 @@ import httpx
 import orjson
 from fastapi import APIRouter, BackgroundTasks, Request, Response
 from fastapi.responses import JSONResponse, PlainTextResponse
+from githubkit.exception import RequestFailed
 from loguru import logger
 from nacl.exceptions import BadSignatureError
 from nacl.signing import VerifyKey
 
 from app import ledger, reminders, subscriptions
-from app.clients import discord_api
+from app.clients import discord_api, github_app
 from app.config import DEFAULT_EVENTS
 from app.identity import oauth, user_links
 from app.interactions import actions, preview
@@ -386,6 +387,9 @@ async def _complete_subscribe(
 ) -> None:
     async with httpx.AsyncClient(timeout=10) as http:
         try:
+            # refuse before creating anything — an uninstalled repo sends no webhooks, so the
+            # subscription would sit in the list looking healthy and never fire (Slack parity)
+            await github_app.verify_installed(repo)
             if not subscriptions.webhook_url_for(channel_id):
                 webhook_id, url = await discord_api.ensure_channel_webhook(http, channel_id)
                 subscriptions.save_webhook(channel_id, webhook_id, url)
@@ -397,7 +401,10 @@ async def _complete_subscribe(
                 f" · label: `{result['label']}`" if result["label"] else ""
             )
             _finish_cmd(interaction, sub, outcome="ok", repo=repo, detail=shown, started=started)
-        except (discord_api.DiscordAPIError, httpx.HTTPError) as exc:
+        except github_app.InstallationMissing as exc:
+            message = f"⚠️ {exc}"
+            _finish_cmd(interaction, sub, outcome="error", repo=repo, detail="app not installed", started=started)
+        except (discord_api.DiscordAPIError, httpx.HTTPError, RequestFailed) as exc:
             message = f"⚠️ Failed to subscribe to `{repo}`: {exc}"
             _finish_cmd(interaction, sub, outcome="error", repo=repo, detail=str(exc), started=started)
         await discord_api.edit_original(http, interaction.get("token") or "", message)

@@ -244,6 +244,38 @@ def test_subscribe_rejects_unknown_feature_token(client, signing_key, discord_st
     assert "pushes" in body["data"]["content"]
 
 
+def test_subscribe_refuses_when_app_not_installed(client, signing_key, discord_stub, monkeypatch):
+    # GitHub delivers no webhooks outside the installation, so the subscription would be dead on arrival
+    from app import subscriptions
+    from app.clients import github_app
+
+    async def not_installed(target):
+        raise github_app.InstallationMissing(target, "https://github.com/apps/ghcord/installations/select_target")
+
+    monkeypatch.setattr(github_app, "verify_installed", not_installed)
+    res = signed_post(client, signing_key, gh_command("subscribe", {"repo": "poppy-labs/dotfiles-ai"}))
+    assert res.json()["type"] == 5  # still deferred — the check is an API call
+    assert subscriptions.for_channel("ch-1") == []  # nothing stored
+    assert discord_stub["ensure"] == 0  # and no Discord webhook created for a subscription we refused
+    assert "isn't installed" in discord_stub["followup"]
+    assert "installations/select_target" in discord_stub["followup"]
+
+
+def test_subscribe_proceeds_when_installation_covers_repo(client, signing_key, discord_stub, monkeypatch):
+    from app import subscriptions
+    from app.clients import github_app
+
+    checked = []
+
+    async def covered(target):
+        checked.append(target)
+
+    monkeypatch.setattr(github_app, "verify_installed", covered)
+    signed_post(client, signing_key, gh_command("subscribe", {"repo": "Monologg/GHCord"}))
+    assert checked == ["monologg/ghcord"]  # normalized target is what gets checked
+    assert subscriptions.for_channel("ch-1")[0]["repo"] == "monologg/ghcord"
+
+
 def test_subscribe_reports_webhook_failure(client, signing_key, monkeypatch):
     from app import subscriptions
     from app.clients import discord_api
